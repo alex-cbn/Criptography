@@ -49,6 +49,8 @@ public:
 	void ChangeSign();
 	int FloorTen(LongInteger M);
 	int Floor(LongInteger numerator, LongInteger denominator);
+	int ActualFractionFloor(LongInteger numerator, LongInteger denominator);
+	int ActualFractionCeil(LongInteger numerator, LongInteger denominator);
 	~LongInteger();
 };
 

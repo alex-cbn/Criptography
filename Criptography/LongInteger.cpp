@@ -107,9 +107,9 @@ LongInteger LongInteger::operator-(LongInteger & other_number)
 	bool is_inversed = false;
 	if (first_number == second_number)
 	{
-		return *new LongInteger("0");
+		return LongInteger("0");
 	}
-	if (*this < other_number)
+	if (LongInteger(this->number_) < other_number)
 	{
 		result = first_number;
 		first_number = second_number;
@@ -234,19 +234,21 @@ LongInteger LongInteger::operator=(std::string & string_value)
 
 bool LongInteger::operator<(LongInteger & other_number)
 {
-	LongInteger This(*this);
-	LongInteger Other(*this);
-	if (IsNegative(This.number_) && IsNegative(Other.number_))
+	LongInteger This(this->number_);
+	LongInteger Other(other_number.number_);
+	bool this_negative = IsNegative(This.number_);
+	bool other_negative = IsNegative(Other.number_);
+	if (this_negative && other_negative)
 	{
 		This.ChangeSign();
 		Other.ChangeSign();
 		return This > Other;
 	}
-	if (IsNegative(This.number_) && !IsNegative(Other.number_))
+	if (this_negative && !other_negative)
 	{
 		return true;
 	}
-	if (!IsNegative(This.number_) && IsNegative(Other.number_))
+	if ((!this_negative && other_negative))
 	{
 		return false;
 	}
@@ -728,6 +730,23 @@ int LongInteger::Floor(LongInteger numerator, LongInteger denominator)
 		}
 	}
 	return floor;
+}
+
+int LongInteger::ActualFractionFloor(LongInteger numerator, LongInteger denominator)
+{
+	int floor = 0;
+	LongInteger guess("0");
+	while(guess < numerator)
+	{
+		guess = guess + denominator;
+		floor++;
+	}
+	return floor - 1;
+}
+
+int LongInteger::ActualFractionCeil(LongInteger numerator, LongInteger denominator)
+{
+	return ActualFractionFloor(numerator, denominator) + 1;
 }
 
 LongInteger::~LongInteger()
