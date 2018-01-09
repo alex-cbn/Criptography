@@ -1,0 +1,18 @@
+Greatest Common Divisor
+
+Addition
+Substraction
+Karatsuba Multiply
+75% Division
+
+Caesar
+CongruenceClass
+
+
+Russian peasants(Fast Powering)
+
+Pollard
+
+25%Pratt
+25%Miller-Rabin
+

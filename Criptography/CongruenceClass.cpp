@@ -6,7 +6,6 @@ CongruenceClass::CongruenceClass()
 {
 }
 
-
 CongruenceClass::~CongruenceClass()
 {
 }
@@ -52,7 +51,7 @@ CongruenceClass CongruenceClass::operator+(const CongruenceClass & other_class)
 		new_value %= this->modulo_;
 		return CongruenceClass(new_value, modulo_);
 	}
-	return CongruenceClass(this->value_,this->modulo_);
+	return CongruenceClass(this->value_, this->modulo_);
 }
 
 CongruenceClass CongruenceClass::operator-(const CongruenceClass & other_class)

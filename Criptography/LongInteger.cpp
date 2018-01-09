@@ -135,7 +135,7 @@ LongInteger LongInteger::operator-(LongInteger & other_number)
 		int second_digit = 0;
 		int next_digit = 0;
 		first_digit = first_number[i] - '0';
-		second_digit = second_number[i-difference] - '0';
+		second_digit = second_number[i - difference] - '0';
 		next_digit = first_digit - second_digit;
 		if (next_digit >= 0)
 		{
@@ -157,13 +157,13 @@ LongInteger LongInteger::operator-(LongInteger & other_number)
 			}
 			else
 			{
-				result[i - 1] = result[i-1]-1;
+				result[i - 1] = result[i - 1] - 1;
 			}
 		}
 		result += ('0' + next_digit);
 
 	}
-	int first_zero=0;
+	int first_zero = 0;
 	int result_length = result.length();
 	for (first_zero; first_zero < result_length; first_zero++)
 	{
@@ -273,12 +273,12 @@ bool LongInteger::operator>(LongInteger & other_number)
 
 bool LongInteger::operator<=(LongInteger & other_number)
 {
-	return (*this <other_number) || (*this == other_number);
+	return (*this < other_number) || (*this == other_number);
 }
 
 bool LongInteger::operator>=(LongInteger & other_number)
 {
-	return (*this >other_number) || (*this == other_number);
+	return (*this > other_number) || (*this == other_number);
 }
 
 bool LongInteger::operator==(LongInteger & other_number)
@@ -296,7 +296,7 @@ LongInteger LongInteger::operator+(std::string & other_number)
 LongInteger LongInteger::operator-(std::string & other_number)
 {
 	LongInteger result(other_number);
-	result = *this -result;
+	result = *this - result;
 	return result;
 }
 
@@ -413,7 +413,7 @@ bool LongInteger::operator<=(const char * other_number)
 
 bool LongInteger::operator>=(const char * other_number)
 {
-	return *this>= std::string(other_number);
+	return *this >= std::string(other_number);
 }
 
 bool LongInteger::operator==(const char * other_number)
@@ -455,9 +455,9 @@ std::string LongInteger::KaratsubaMultiply(std::string n, std::string m)
 			min_length = n_length;
 		}
 		int k = (min_length + 1) / 2;
-		std::string a = n.substr(0, n_length-k);
+		std::string a = n.substr(0, n_length - k);
 		std::string b = n.substr(n_length - k, n_length);
-		std::string c = m.substr(0, m_length-k);
+		std::string c = m.substr(0, m_length - k);
 		std::string d = m.substr(m_length - k, m_length);
 		std::string prod_1 = TenPow(KaratsubaMultiply(a, c), 2 * k);
 		std::string prod_2 = KaratsubaMultiply(Add(a, b), Add(c, d));
@@ -482,12 +482,12 @@ std::pair<std::string, std::string> LongInteger::KaratsubaDivide(std::string n, 
 	}
 	if (M == "1")
 	{
-		return std::make_pair(n,"0");
+		return std::make_pair(n, "0");
 	}
 	if (M < "0")
 	{
 		M.ChangeSign();
-		std::pair<std::string, std::string> _return= KaratsubaDivide(N.GetPrintableValue(), M.GetPrintableValue());
+		std::pair<std::string, std::string> _return = KaratsubaDivide(N.GetPrintableValue(), M.GetPrintableValue());
 		LongInteger Q(_return.first);
 		LongInteger R(_return.second);
 		Q.ChangeSign();
@@ -523,11 +523,11 @@ std::pair<std::string, std::string> LongInteger::KaratsubaDivide(std::string n, 
 	}
 	if (N_length == M_length)
 	{
-		std::string guess_q="0";
+		std::string guess_q = "0";
 		for (int i = 0; i < 10; i++)
 		{
 			guess_q[0] = (char)('0' + i);
-			LongInteger N_new = M*guess_q;
+			LongInteger N_new = M * guess_q;
 			if (N == N_new)
 			{
 				return std::make_pair(guess_q, N_new.GetPrintableValue());
@@ -550,7 +550,7 @@ std::pair<std::string, std::string> LongInteger::KaratsubaDivide(std::string n, 
 		}
 		else
 		{
-			y_0 = y_0 * (floor+1);
+			y_0 = y_0 * (floor + 1);
 		}
 		int i = 0;
 		y_i_1 = y_0;
@@ -668,6 +668,11 @@ bool LongInteger::IsNegative(std::string number)
 	return false;
 }
 
+bool LongInteger::Sign()
+{
+	return !this->IsNegative(this->number_);
+}
+
 void LongInteger::ChangeSign()
 {
 	if (IsNegative(number_))
@@ -734,14 +739,34 @@ int LongInteger::Floor(LongInteger numerator, LongInteger denominator)
 
 int LongInteger::ActualFractionFloor(LongInteger numerator, LongInteger denominator)
 {
+	LongInteger NUM = numerator;
+	LongInteger DEN = denominator;
+	bool result_sign=true;
+	if (!NUM.Sign())
+	{
+		NUM.ChangeSign();
+		result_sign = !result_sign;
+	}
+	if (!DEN.Sign())
+	{
+		DEN.ChangeSign();
+		result_sign = !result_sign;
+	}
 	int floor = 0;
 	LongInteger guess("0");
-	while(guess < numerator)
+	while (guess <= NUM)
 	{
-		guess = guess + denominator;
+		guess = guess + DEN;
 		floor++;
 	}
-	return floor - 1;
+	if (result_sign)
+	{
+		return floor - 1;
+	}
+	else
+	{
+		return -(floor);
+	}
 }
 
 int LongInteger::ActualFractionCeil(LongInteger numerator, LongInteger denominator)
